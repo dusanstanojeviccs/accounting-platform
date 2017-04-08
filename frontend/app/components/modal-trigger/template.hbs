@@ -1,0 +1,13 @@
+{{#if link}}
+	<a href="#" {{action "triggerModal"}}>
+		{{#if text}}
+			{{text}}
+		{{else}}
+			{{yield}}
+		{{/if}}
+	</a>
+{{else}}
+	<a class={{concat "btn " btn}} href="#" {{action "triggerModal"}}>
+		<span class={{concat "fa " img}}></span>{{text}}
+	</a>
+{{/if}}

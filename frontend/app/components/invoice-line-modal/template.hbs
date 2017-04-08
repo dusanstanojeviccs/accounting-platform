@@ -1,0 +1,27 @@
+{{#modal-comp modalId="invoiceLineModal" title=(if line.isNew "New Invoice Line" "Save Invoice Line")
+				btnClass="btn-primary" btnText=(if line.isNew "New Invoice Line" "Save Invoice Line")
+				backAction="backAction" successAction="successAction"}}
+	{{modal-error-comp model=invoice}}
+	<div class="form-group">
+    	<label for="exampleTextarea">Item Name</label>
+    	{{input type="text" class="form-control" value=line.itemName}}
+    </div>
+
+	<div class="form-group">
+		<label for="exampleTextarea">Account</label>
+		<select class="form-control" onchange={{action "setAccount" value="target.value"}}>
+		    <option value="-1" selected={{and (eq "" line.accountNum) (eq "" line.accountName)}}>Please select an account</option>
+
+		    {{#each accounts as |account index|}}
+		    	<option value={{index}} selected={{and (eq account.accountNum line.accountNum) (eq account.accountName line.accountName)}}>{{account.accountNum}} - {{account.accountName}}</option>
+		    {{/each}}
+		</select>
+	</div>
+
+  	<div class="form-group">
+    	<label for="exampleTextarea">Amount</label>
+    	{{input type="text" class="form-control" value=line.amount}}
+    </div>
+
+
+{{/modal-comp}}

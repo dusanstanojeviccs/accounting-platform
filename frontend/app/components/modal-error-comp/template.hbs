@@ -1,0 +1,11 @@
+{{#if model.errors}}
+
+	<div class="alert alert-danger"> 
+		<ul>
+			{{#each model.errors.messages as |message|}}
+				<li>{{message}}</li>
+			{{/each}}
+		</ul>
+	</div>
+
+{{/if}}

@@ -1,0 +1,24 @@
+{{#modal-comp modalId="vendorModal" title=(if vendor.isNew "New Vendor" "Save Vendor")
+				btnClass="btn-primary" btnText=(if vendor.isNew "New Vendor" "Save Vendor")
+				backAction="backAction" successAction="successAction"}}
+
+  {{modal-error-comp model=vendor}}
+
+  <div class="form-group">
+    <label>Vendor/Customer</label>
+      {{input type="text" value=vendor.vendorName class="form-control"}}
+  </div>
+  <div class="form-group">
+    <label>Payee Name</label>
+      {{input type="text" value=vendor.payeeName class="form-control"}}
+  </div>
+  <div class="form-group">
+    <label>Payee Email</label>
+	   {{input type="email" value=vendor.payeeEmail class="form-control"}}
+  </div>
+  <div class="form-group">
+    <label>Phone Number</label>
+    {{input type="tel" value=vendor.phoneNumber class="form-control"}}
+  </div>
+
+{{/modal-comp}}

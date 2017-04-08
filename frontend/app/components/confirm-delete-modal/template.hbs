@@ -1,0 +1,9 @@
+{{#modal-comp modalId=(concat (concat "delete" type) "Modal") title="Confirm Delete" 
+				btnClass="btn-danger" btnText="Delete"
+				backAction="backAction" successAction="successAction"}}
+	
+	{{modal-error-comp model=model}}
+
+	Are you sure you would like to delete this {{type}}?
+
+{{/modal-comp}}

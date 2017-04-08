@@ -1,0 +1,54 @@
+<div class="col-md-12">
+    <div class="card">
+        <div class="header">
+            <h4 class="title">
+                Bills
+                {{modal-trigger modalId="billModal" btn="btn-primary" img="fa-plus" text="New Bill" class="pull-right" onTrigger="setupNewBill"}}
+            </h4>
+            <p class="category">Bills help you keep track of your payments</p>
+        </div>
+        
+        <div class="content">
+            {{#if notDeleted.length}}
+                <div class="table-responsive table-full-width">
+                    <table class="table table-hover table-striped">
+                        <thead data-table-id={{tableId}}>
+                            <th></th>
+                            {{#sortable-th key="vendorName"}}
+                                Vendor
+                            {{/sortable-th}}
+                            {{#sortable-th key="creationDate" class="text-center"}}
+                                Created
+                            {{/sortable-th}}
+                            {{#sortable-th key="dueDate" class="text-center"}}
+                                Due
+                            {{/sortable-th}}
+                        </thead>
+                        <tbody>
+                            {{#each notDeleted as |bill index|}}
+        						{{#link-to "accounting.bill" bill.id tagName="tr"}}
+        						    <td>
+                                        {{increment index}}
+                                    </td>
+                                    <td>{{bill.vendorName}}</td>
+        							<td class="text-center">{{bill.creationDate}}</td>
+        							<td class="text-center">{{bill.dueDate}}</td>
+        						{{/link-to}}
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            {{else}}
+                <div class="row">
+                    <div class="no-results">
+                        <div class="text-danger">
+                            No Results Found
+                        </div>
+                    </div>
+                </div>
+            {{/if}}
+        </div>
+    </div>
+</div>
+
+{{bill-modal bill=bill vendors=model.vendors}}

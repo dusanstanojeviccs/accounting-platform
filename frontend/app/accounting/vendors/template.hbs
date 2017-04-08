@@ -1,0 +1,56 @@
+<div class="col-md-12">
+    <div class="card">
+        <div class="header">
+            <h4 class="title">
+                Vendor/Customer
+                {{modal-trigger modalId="vendorModal" btn="btn-primary" img="fa-plus" text="New Vendor" class="pull-right" onTrigger="setupNewVendor"}}
+            </h4>
+            <p class="category">Vendors and Customers are people and companies you buy and sell to</p>
+        </div>
+        <div class="content">
+            {{#if notDeleted.length}}
+                <div class="table-responsive table-full-width">
+                    <table class="table table-hover table-striped">
+                        <thead data-table-id={{tableId}}>
+                            <th></th>
+
+    						{{#sortable-th key="vendorName"}}
+    							Name
+    						{{/sortable-th}}
+    						{{#sortable-th key="payeeName"}}
+    							Payee Name
+    						{{/sortable-th}}
+    						{{#sortable-th key="payeeEmail"}}
+    							Payee Email
+    						{{/sortable-th}}
+    						{{#sortable-th key="phoneNumber"}}
+    							Phone Number
+    						{{/sortable-th}}
+                        </thead>
+                        <tbody>
+                            {{#each notDeleted as |vendor index|}}
+                                <tr>
+                                	<td>{{increment index}}</td>
+    								<td>{{vendor.vendorName}}</td>
+    								<td>{{vendor.payeeName}}</td>
+    								<td>{{vendor.payeeEmail}}</td>
+    								<td>{{vendor.phoneNumber}}</td>
+                                </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            {{else}}
+                <div class="row">
+                    <div class="no-results">
+                        <div class="text-danger">
+                            No Results Found
+                        </div>
+                    </div>
+                </div>
+            {{/if}}
+        </div>
+    </div>
+</div>
+
+{{vendor-modal vendor=vendor}}

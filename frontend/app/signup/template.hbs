@@ -1,0 +1,10 @@
+<div class="login-page">
+  <div class="form">
+    <form class="login-form" {{action "signup" on="submit"}}>
+      {{input type="text" placeholder="username" value=username}}
+      {{input type="password" placeholder="password" value=password}}
+      <button>create</button>
+      <p class="message">Already registered? {{#link-to "signin" tagName="a"}}Sign In{{/link-to}}</p>
+    </form>
+  </div>
+</div>

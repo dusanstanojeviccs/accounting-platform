@@ -1,0 +1,23 @@
+{{#modal-comp modalId="invoiceModal" title=(if invoice.isNew "New invoice" "Save Invoice")
+				btnClass="btn-primary" btnText=(if invoice.isNew "New invoice" "Save Invoice")
+				backAction="backAction" successAction="successAction"}}
+	
+  {{modal-error-comp model=invoice}}
+
+  <div class="form-group">
+    <label for="exampleTextarea">Vendor</label>
+    <select class="form-control" onchange={{action "setVendor" value="target.value"}}>
+	    {{#each vendors as |vendor index|}}
+	    	<option value={{index}} selected={{eq invoice.vendorName vendor.vendorName}}>{{vendor.vendorName}}</option>
+	    {{/each}}
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="exampleTextarea">Due Date</label>
+    {{#if invoice}}
+      {{input-date value=invoice.dueDate}}
+    {{/if}}
+  </div>
+
+{{/modal-comp}}

@@ -1,0 +1,122 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/security
+       http://www.springframework.org/schema/security/spring-security-4.1.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <security:authentication-manager alias="authenticationManager">
+        <security:authentication-provider ref="customAuthenticationProvider" />
+    </security:authentication-manager>
+
+    <security:http use-expressions="true" auto-config="false" entry-point-ref="http403EntryPoint">
+        <security:intercept-url pattern="/bills**" access="hasAuthority('user')" />
+        <security:intercept-url pattern="/invoices**" access="hasAuthority('user')" />
+        <security:intercept-url pattern="/accounts**" access="hasAuthority('user')" />
+        <security:intercept-url pattern="/vendors**" access="hasAuthority('user')" />
+        <security:intercept-url pattern="/users**" access="hasAuthority('user')" />
+
+        <security:custom-filter ref="CustomUsernamePasswordAuthenticationFilter" position="FORM_LOGIN_FILTER"/>
+
+        <security:logout invalidate-session="true" success-handler-ref="logoutSuccessHandler" delete-cookies="true"/>
+
+        <security:session-management>
+            <security:concurrency-control max-sessions="1" error-if-maximum-exceeded="true" />
+        </security:session-management>
+
+        <security:csrf disabled="true"/>
+
+        <security:access-denied-handler ref="accessDeniedHandler" />
+    </security:http>
+
+    <bean id="CustomUsernamePasswordAuthenticationFilter" class="com.it355.authentification.AuthenticationFilter">
+        <property name="authenticationManager" ref="authenticationManager" />
+        <property name="authenticationSuccessHandler" ref="customSuccessHandler"/>
+        <property name="authenticationFailureHandler" ref="failureHandler"/>
+        <property name="filterProcessesUrl" value="/j_spring_security_check"/>
+        <property name="usernameParameter" value="j_username"/>
+        <property name="passwordParameter" value="j_password"/>
+    </bean>
+    <bean id="accessDeniedHandler" class="com.it355.authentification.AccessDeniedHandler"></bean>
+    <bean id="customSuccessHandler" class="com.it355.authentification.SuccessHandler"></bean>
+    <bean id="failureHandler" class="com.it355.authentification.FailiureHandler"></bean>
+    <bean id="logoutSuccessHandler" class="com.it355.authentification.LogoutSuccessHandler"></bean>
+
+    <bean id="http403EntryPoint" class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint" />
+
+
+    <bean id="customAuthenticationProvider" class="com.it355.authentification.CustomAuthenticationProvider" autowire="byName"></bean>
+
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost:3306/accounting?useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC" />
+        <property name="username" value="root" />
+        <property name="password" value="root" />
+    </bean>
+
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
+
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                <prop key="hibernate.show_sql">true</prop>
+            </props>
+        </property>
+
+        <property name="packagesToScan" value="com.it355.models" />
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>
+
+    <bean id="template" class="org.springframework.orm.hibernate4.HibernateTemplate">
+        <property name="sessionFactory" ref="sessionFactory"></property>
+        <property name="checkWriteOperations" value="false"></property>
+    </bean>
+
+
+    <tx:annotation-driven proxy-target-class="true" />
+
+
+    <bean id="messageSource"
+          class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basename" value="classpath:messages" />
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+
+    <context:component-scan base-package="com.it355.dao"/>
+    <context:component-scan base-package="com.it355.controllers"/>
+    <context:component-scan base-package="com.it355.controllers.rest"/>
+    <context:component-scan base-package="com.it355.models"/>
+    <context:component-scan base-package="com.it355.utils"/>
+    <context:component-scan base-package="com.it355.logers"/>
+
+    <mvc:annotation-driven />
+
+    <aop:aspectj-autoproxy/>
+
+    <bean id="viewResolver"
+          class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
+        <property name="prefix" value="/WEB-INF/jsp/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+
+
+</beans>

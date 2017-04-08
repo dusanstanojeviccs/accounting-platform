@@ -1,0 +1,53 @@
+<div class="col-md-12">
+    <div class="card">
+        <div class="header">
+            <h4 class="title">Invoice {{model.invoice.creationDate}} - {{model.invoice.dueDate}}
+                {{#modal-trigger modalId="deleteInvoiceModal" link=true tagName=""}} 
+                    <span class="fa fa-trash text-danger"></span>
+                {{/modal-trigger}}
+
+                {{modal-trigger modalId="invoiceLineModal" btn="btn-primary" img="fa-plus" text="New Invoice Line" class="pull-right" onTrigger="setupNewInvoiceLine"}}
+            </h4>
+            {{#if model.invoice.vendorName}}
+                <p class="category">{{model.invoice.vendorName}}</p>
+            {{/if}}
+            
+            {{#if model.invoice.payeeName}}
+                <p class="category">{{model.invoice.payeeName}}</p>
+            {{/if}}
+
+            {{#if model.invoice.payeeEmail}}
+                <p class="category">{{model.invoice.payeeEmail}}</p>
+            {{/if}}
+
+            {{#if model.invoice.payeePhone}}
+                <p class="category">{{model.invoice.payeePhone}}</p>
+            {{/if}}
+        </div>
+        <div class="content table-responsive table-full-width">
+            <table class="table table-hover table-striped">
+                <thead>
+                    <th>Item</th>
+                    <th>Account Number</th>
+                    <th>Account Name</th>
+                    <th>Amount</th>
+                </thead>
+                <tbody>
+                    {{#each model.invoice.lines as |invoiceline index|}}
+                        <tr>
+                            <td>{{invoiceline.itemName}}</td>
+                            <td>{{invoiceline.accountNum}}</td>
+                            <td>{{invoiceline.accountName}}</td>
+                            <td>{{invoiceline.amount}}</td>
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+{{invoice-line-modal line=line invoice=model.invoice accounts=model.accounts}}
+
+{{confirm-delete-modal model=model.invoice type="Invoice" onDelete="onDelete"}}

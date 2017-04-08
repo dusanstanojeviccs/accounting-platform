@@ -1,0 +1,25 @@
+{{#modal-comp modalId="accountModal" title=(if account.isNew "New Account" "Save Account")
+				btnClass="btn-primary" btnText=(if account.isNew "New Account" "Save Account")
+				backAction="backAction" successAction="successAction"}}
+	
+  {{modal-error-comp model=account}}
+
+  <div class="form-group">
+    <label for="exampleTextarea">Type</label>
+    <select class="form-control" onchange={{action (mut account.typ) value="target.value"}}>
+	    <option value="PAYABLE" selected={{eq "PAYABLE" account.type}}>PAYABLE</option>
+	    <option value="RECEIVABLE" selected={{eq "RECEIVABLE" account.type}}>RECEIVABLE</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="exampleTextarea">Account Number</label>
+    {{input type="text" class="form-control" value=account.accountNumber}}
+  </div>
+
+  <div class="form-group">
+    <label for="exampleTextarea">Account Name</label>
+    {{input type="text" class="form-control" value=account.accountName}}
+  </div>
+
+{{/modal-comp}}
